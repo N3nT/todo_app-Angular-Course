@@ -1,0 +1,40 @@
+<div class="menu">
+  <h1>ToDO APP</h1>
+  <div class="button">
+    <button (click)="showAndHide()">Add</button>
+    <button [disabled]="zadania.length==0" (click)="usunWszystkie()">Delete All</button>
+  </div>
+</div>
+<ng-container *ngIf="zadania.length==0; then thenTemplate; else elseTemplate"></ng-container>
+<ng-template #thenTemplate>
+  <h1>Nothing to do now!</h1>
+</ng-template>
+<ng-template #elseTemplate>
+  <div class="content">
+    <div class="item" [ngClass]="{'praca': z.kategoria == 'Work', 'dom': z.kategoria == 'House', 'hobby': z.kategoria == 'Hobby', 'nauka': z.kategoria == 'Learning'}"*ngFor="let z of zadania">
+      <h1>{{z.kategoria}}</h1>
+      <h3 [ngClass]="{'skreslenie': z.zrobione}">{{z.zadanie}}</h3>
+      <h3 [ngClass]="{'skreslenie': z.zrobione}">{{z.priorytet}}</h3>
+      <div class="zmienPriorytet">
+        <button (click)="zmienPriorytet(z, +1); sortowanie(z)" [disabled]="z.zrobione">+</button>
+        <button (click)="zmienPriorytet(z, -1); sortowanie(z)" [disabled]="z.zrobione">-</button>
+      </div>
+      <div class="modifikacja">
+        <button (click)="skresl(z)">Done</button>
+        <button (click)="usun(z)">Delete</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<div class="dodawanie" *ngIf="aktywnosc1">
+  <div class="cien" (click)="showAndHide()"></div>
+  <h1>Add Task</h1>
+  <textarea placeholder="Task description" [(ngModel)]="trescZadania"></textarea>
+  <select [(ngModel)]="kategoria">
+    <option *ngFor="let k of kat">{{k}}</option>
+  </select>
+  <div class="buttonWrap">
+    <button (click)="dodaj(); showAndHide()" [disabled]="trescZadania=='' || kategoria==''">Add</button>
+    <button (click)="showAndHide()">Cancel</button>
+  </div>
+</div>
